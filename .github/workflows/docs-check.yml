@@ -1,0 +1,25 @@
+name: Documentation Checks
+on: [push, pull_request]
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Step 1: Markdown Linting
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint@v3
+        with:
+          config_file: .markdownlint.yaml
+
+      # Step 2: Link Validation
+      - name: Check broken links
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --no-progress **/*.md  # Scan all Markdown files
+
+      # Step 3: Metadata Check
+      - name: Validate metadata
+        run: |
+          python scripts/validate_metadata.py
