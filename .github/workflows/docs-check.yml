@@ -7,11 +7,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
       # Step 1: Markdown Linting
       - name: Run markdownlint
-        uses: actionshub/markdownlint@2.1.0
-        with:
-          config_file: .markdownlint.yaml
+        run: |
+          npm install -g markdownlint-cli
+          markdownlint **/*.md -c .markdownlint.yaml
 
       # Step 2: Link Validation
       - name: Check broken links
